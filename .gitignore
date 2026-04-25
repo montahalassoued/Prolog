@@ -1,0 +1,26 @@
+# SWI-Prolog build and editor artifacts
+*.qlf
+*.xwam
+*.stackdump
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+*.orig
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# VS Code and workspace caches
+.vscode/
+.idea/
+
+# Prolog package and test outputs
+_build/
+build/
+coverage/
+*.out
+*.err
