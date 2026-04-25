@@ -1,7 +1,5 @@
 # Intelligent Energy-Aware Campus Resource Scheduling System
 
-This is a simple Prolog project guide for an academic campus scheduling system. Each file is split by responsibility so every teammate can see what to work on first.
-
 ## Prerequisites
 
 - SWI-Prolog: [Download](https://www.swi-prolog.org/download/stable/bin/swipl-10.0.2-1.x64.exe.envelope)
