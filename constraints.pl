@@ -7,6 +7,7 @@
 
 % On charge la base de connaissances si elle n'est pas déjà chargée
 :- ensure_loaded('knowledge_base.pl').
+:- ensure_loaded('energy.pl').
 
 % ============================================================
 % H1 : Capacité de la salle (Room Capacity)
@@ -64,11 +65,7 @@ no_energy_violation(RoomId, Day, Schedule) :-
     % On trouve dans quel bâtiment se trouve la salle
     room_building(RoomId, BuildingId),
     
-    % On vérifiera que le bâtiment ne dépasse pas son seuil pour ce jour
-    % En attendant le module energy.pl (Personne 4), on suppose que c'est vrai par défaut.
-    % Quand energy.pl sera prêt, il faudra décommenter la ligne suivante :
-    % energy_within_threshold(BuildingId, Day, Schedule).
-    true.
+    energy_within_threshold(BuildingId, Day, Schedule).
 
 % ============================================================
 % VALIDATION GLOBALE D'UNE ASSIGNATION

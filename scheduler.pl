@@ -35,9 +35,9 @@ assign_course_to_slot(session(CourseId, SessionIdx), Timeslots, assignment(Cours
 	instructor_available(CourseId, TimeslotId).
 
 % extend_schedule(+PartialSchedule, +Assignment, -ExtendedSchedule) is semidet.
-% Adds an assignment only if the resulting partial schedule is valid.
+% Adds an assignment only if it satisfies all constraints against the existing partial schedule.
 extend_schedule(PartialSchedule, Assignment, [Assignment | PartialSchedule]) :-
-	valid_partial_schedule([Assignment | PartialSchedule]).
+	all_constraints_ok(Assignment, PartialSchedule).
 
 % valid_partial_schedule(+PartialSchedule) is semidet.
 % Checks all hard constraints against the partial schedule.
