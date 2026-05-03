@@ -142,10 +142,10 @@ print_timeslot_assignments(TimeslotId, Schedule) :-
 % Prints detailed information about a single assignment.
 print_assignment_detail(CourseId, SessionIdx, RoomId, TimeslotId) :-
     course(CourseId, _, Duration, GroupId, Equipment, Instructor),
-    room(RoomId, Capacity, _, Building, EnergyCost),
+    room(RoomId, Capacity, _, Building, _EnergyCost),
     group(GroupId, GroupSize),
     session_energy(RoomId, CourseId, Energy),
-    timeslot(TimeslotId, Day, Hour),
+    timeslot(TimeslotId, _Day, _Hour),
     
     format('  ├─ Course: ~w (Session ~w/~w)~n', [CourseId, SessionIdx, Duration]),
     format('  │  Room: ~w | Building: ~w | Capacity: ~w | Group Size: ~w~n', 
