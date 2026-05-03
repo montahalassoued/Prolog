@@ -51,10 +51,9 @@ run_optimized_scheduler(BestSchedule) :-
     writeln('=== RUNNING OPTIMIZED SCHEDULER ==='),
     writeln('Finding all valid schedule candidates...'),
     
-    % Generate all valid schedules (collectes all solutions)
-    findall(Schedule, 
-            (all_courses(C), all_timeslots(T), generate_schedule(C, T, Schedule)),
-            Schedules),
+    % Generate up to 20 valid schedules to compare (bounded to avoid exhaustion)
+    all_courses(C), all_timeslots(T),
+    findnsols(20, Schedule, generate_schedule(C, T, Schedule), Schedules),
     
     length(Schedules, NumSchedules),
     format('Generated ~w valid schedule(s).~n', [NumSchedules]),

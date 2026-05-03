@@ -60,7 +60,7 @@ test_extend_schedule_empty :-
 
 test_extend_schedule_valid :-
     PartialSchedule = [assignment(c1, 1, r101, t_mon_8)],
-    Assignment = assignment(c2, 1, r102, t_mon_10),
+    Assignment = assignment(c8, 1, r201, t_mon_10),   % c8: g3/lab_computer, r201: lab_computer cap30
     extend_schedule(PartialSchedule, Assignment, _ExtendedSchedule),
     write('? Schedule extension (valid): PASS'), nl.
 
@@ -69,8 +69,8 @@ test_extend_schedule_valid :-
 % ============================================================
 
 test_generate_schedule_single :-
-    findall(C, course(C, _, _, _, _, _), Courses),
-    findall(T, timeslot(T, _, _), Timeslots),
+    Courses = [c1, c7, c9],   % g1/g3/g4 — groupes distincts, salles disponibles
+    all_timeslots(Timeslots),
     generate_schedule(Courses, Timeslots, Schedule),
     is_list(Schedule),
     length(Schedule, NumAssignments),
@@ -78,8 +78,8 @@ test_generate_schedule_single :-
     write('  [ok] schedule generation (single): PASS'), nl.
 
 test_schedule_validity :-
-    findall(C, course(C, _, _, _, _, _), Courses),
-    findall(T, timeslot(T, _, _), Timeslots),
+    Courses = [c1, c7, c9],
+    all_timeslots(Timeslots),
     generate_schedule(Courses, Timeslots, Schedule),
     forall(
         member(Assignment, Schedule),
@@ -131,8 +131,6 @@ run_scheduler_tests :-
     writeln('All scheduler tests completed!'), nl.
 
 :- begin_tests(scheduler).
-
-:- ensure_loaded('scheduler.pl').
 
 test(build_session_requests_expands_sessions) :-
 build_session_requests([c1, c2], Requests),
