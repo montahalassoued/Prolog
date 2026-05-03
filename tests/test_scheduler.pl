@@ -3,9 +3,9 @@
 %% DEPS: knowledge_base.pl, constraints.pl, scheduler.pl
 %% PURPOSE: Unit tests for Person 3's scheduler module
 
-:- ensure_loaded('../knowledge_base.pl').
-:- ensure_loaded('../constraints.pl').
-:- ensure_loaded('../scheduler.pl').
+:- ensure_loaded('knowledge_base.pl').
+:- ensure_loaded('constraints.pl').
+:- ensure_loaded('scheduler.pl').
 
 :- if(\+ current_predicate(generate_schedule/1)).
 generate_schedule(Schedule) :-
@@ -132,7 +132,7 @@ run_scheduler_tests :-
 
 :- begin_tests(scheduler).
 
-:- ensure_loaded('../scheduler.pl').
+:- ensure_loaded('scheduler.pl').
 
 test(build_session_requests_expands_sessions) :-
 build_session_requests([c1, c2], Requests),
