@@ -46,9 +46,10 @@ room(r103, 30, standard,        b1,  8).  % Salle de cours basique
 room(r104, 50, whiteboard_plus, b1, 12).  % Amphithéâtre équipé (tableau interactif)
 
 % --- Salles du Bâtiment b2 (Laboratoires) ---
-room(r201, 20, lab_computer,    b2, 25).  % Laboratoire informatique — 20 postes
-room(r202, 20, lab_computer,    b2, 25).  % Laboratoire informatique — 20 postes (bis)
+room(r201, 30, lab_computer,    b2, 25).  % Laboratoire informatique — 30 postes
+room(r202, 30, lab_computer,    b2, 25).  % Laboratoire informatique — 30 postes (bis)
 room(r203, 15, lab_computer,    b2, 20).  % Salle TP restreinte — 15 postes
+room(r204, 40, lab_computer,    b2, 25).  % Grand laboratoire — 40 postes (g4/IIA3)
 
 % --- Salles du Bâtiment b3 (Annexe) ---
 room(r301, 30, standard,        b3,  7).  % Salle polyvalente de l'annexe

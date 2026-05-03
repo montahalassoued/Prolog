@@ -51,10 +51,9 @@ run_optimized_scheduler(BestSchedule) :-
     writeln('=== RUNNING OPTIMIZED SCHEDULER ==='),
     writeln('Finding all valid schedule candidates...'),
     
-    % Generate all valid schedules (collectes all solutions)
-    findall(Schedule, 
-            (all_courses(C), all_timeslots(T), generate_schedule(C, T, Schedule)),
-            Schedules),
+    % Generate up to 20 valid schedules to compare (bounded to avoid exhaustion)
+    all_courses(C), all_timeslots(T),
+    findnsols(20, Schedule, generate_schedule(C, T, Schedule), Schedules),
     
     length(Schedules, NumSchedules),
     format('Generated ~w valid schedule(s).~n', [NumSchedules]),
@@ -143,10 +142,10 @@ print_timeslot_assignments(TimeslotId, Schedule) :-
 % Prints detailed information about a single assignment.
 print_assignment_detail(CourseId, SessionIdx, RoomId, TimeslotId) :-
     course(CourseId, _, Duration, GroupId, Equipment, Instructor),
-    room(RoomId, Capacity, _, Building, EnergyCost),
+    room(RoomId, Capacity, _, Building, _EnergyCost),
     group(GroupId, GroupSize),
     session_energy(RoomId, CourseId, Energy),
-    timeslot(TimeslotId, Day, Hour),
+    timeslot(TimeslotId, _Day, _Hour),
     
     format('  ├─ Course: ~w (Session ~w/~w)~n', [CourseId, SessionIdx, Duration]),
     format('  │  Room: ~w | Building: ~w | Capacity: ~w | Group Size: ~w~n', 
@@ -307,7 +306,13 @@ benchmark(NbSolutions, Time) :-
     % Start timer
     get_time(StartTime),
     
-    % Generate schedules
+    % Generate ALL valid schedules first, then take the first ActualN of them.
+    % The pattern:
+    %   length(Schedules, ActualN),   % creates a list of ActualN unbound vars
+    %   append(Schedules, _, AllSchedules)  % unifies those vars with the front
+    % is a standard Prolog idiom for taking the first N elements of a list
+    % without copying the tail.  It is correct because length/2 succeeds
+    % deterministically when its second argument is already ground.
     findall(S, generate_schedule(Courses, Timeslots, S), AllSchedules),
     length(AllSchedules, TotalFound),
     ActualN is min(NbSolutions, TotalFound),
@@ -336,73 +341,20 @@ benchmark(NbSolutions, Time) :-
 % ============================================================
 % SECTION 5: HELPER PREDICATES
 % ============================================================
-
-% all_courses(-Courses)
-% Returns list of all course IDs from knowledge base.
-all_courses(Courses) :-
-    findall(CourseId, course(CourseId, _, _, _, _, _), Courses).
-
-% all_timeslots(-Timeslots)
-% Returns list of all timeslot IDs from knowledge base.
-all_timeslots(Timeslots) :-
-    findall(TimeslotId, timeslot(TimeslotId, _, _), Timeslots).
-
-% course_sessions(+CourseId, -SessionCount)
-% Returns number of required sessions for a course.
-course_sessions(CourseId, SessionCount) :-
-    course(CourseId, SessionCount, _, _, _, _).
-
-% course_group(+CourseId, -GroupId)
-% Returns the student group for a course.
-course_group(CourseId, GroupId) :-
-    course(CourseId, _, _, GroupId, _, _).
-
-% course_equipment(+CourseId, -Equipment)
-% Returns required equipment for a course.
-course_equipment(CourseId, Equipment) :-
-    course(CourseId, _, _, _, Equipment, _).
-
-% room_compatible(+CourseId, -RoomId)
-% Checks if a room is compatible with a course (capacity + equipment).
-room_compatible(CourseId, RoomId) :-
-    room(RoomId, _, _, _, _),
-    capacity_ok(CourseId, RoomId),
-    equipment_ok(CourseId, RoomId).
-
-% room_capacity(+RoomId, -Capacity)
-% Returns capacity of a room.
-room_capacity(RoomId, Capacity) :-
-    room(RoomId, Capacity, _, _, _).
-
-% room_equipment(+RoomId, -Equipment)
-% Returns equipment type in a room.
-room_equipment(RoomId, Equipment) :-
-    room(RoomId, _, Equipment, _, _).
-
-% room_building(+RoomId, -Building)
-% Returns building that contains a room.
-room_building(RoomId, Building) :-
-    room(RoomId, _, _, Building, _).
-
-% group_size(+GroupId, -Size)
-% Returns number of students in a group.
-group_size(GroupId, Size) :-
-    group(GroupId, Size).
-
-% timeslot_day(+TimeslotId, -Day)
-% Returns day of the week for a timeslot.
-timeslot_day(TimeslotId, Day) :-
-    timeslot(TimeslotId, Day, _).
-
-% instructor_ok(+CourseId, +TimeslotId)
-% Wrapper around instructor_available for readability.
-instructor_ok(CourseId, TimeslotId) :-
-    instructor_available(CourseId, TimeslotId).
-
-% all_constraints_ok(+Assignment, +Schedule)
-% Already defined in constraints.pl, but referenced here for completeness.
-% Checks: capacity, equipment, instructor availability, no room conflict,
-%         no group conflict, and energy threshold compliance.
+%
+% NOTE: The predicates below are intentionally NOT redefined here.
+% They are already provided by knowledge_base.pl and constraints.pl,
+% which are loaded at the top of this file.  Redefining them would
+% silently shadow the canonical versions and create a maintenance hazard.
+%
+% Provided by knowledge_base.pl:
+%   all_courses/1, all_timeslots/1,
+%   course_sessions/2, course_group/2, course_equipment/2,
+%   room_compatible/2, room_capacity/2, room_equipment/2, room_building/2,
+%   group_size/2, timeslot_day/2
+%
+% Provided by constraints.pl:
+%   instructor_ok/2, all_constraints_ok/2
 
 % ============================================================
 % SECTION 6: ENTRY POINTS & INTERACTIVE MODE

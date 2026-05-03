@@ -3,9 +3,9 @@
 %% DEPS: knowledge_base.pl, energy.pl, constraints.pl
 %% PURPOSE: Unit tests for Person 4's energy calculation module
 
-:- ensure_loaded('../knowledge_base.pl').
-:- ensure_loaded('../energy.pl').
-:- ensure_loaded('../constraints.pl').
+:- ensure_loaded('knowledge_base.pl').
+:- ensure_loaded('energy.pl').
+:- ensure_loaded('constraints.pl').
 
 % ============================================================
 % TEST SUITE 1: SESSION ENERGY CALCULATION

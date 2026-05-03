@@ -3,7 +3,7 @@
 %% DEPS: knowledge_base.pl
 %% PURPOSE: Unit tests for Person 1's knowledge base module
 
-:- ensure_loaded('../knowledge_base.pl').
+:- ensure_loaded('knowledge_base.pl').
 
 % ============================================================
 % TEST SUITE 1: GROUP DEFINITIONS

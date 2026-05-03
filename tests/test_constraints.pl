@@ -3,8 +3,8 @@
 %% DEPS: knowledge_base.pl, constraints.pl
 %% PURPOSE: Unit tests for Person 2's constraint module
 
-:- ensure_loaded('../knowledge_base.pl').
-:- ensure_loaded('../constraints.pl').
+:- ensure_loaded('knowledge_base.pl').
+:- ensure_loaded('constraints.pl').
 
 % ============================================================
 % TEST SUITE 1: CAPACITY CONSTRAINT (H1)
